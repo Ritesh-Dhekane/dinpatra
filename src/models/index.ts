@@ -14,4 +14,5 @@ export type {
   RuntimeCalendarDayRecord,
   RuntimeCalendarYearDocument,
 } from './runtime'
+export type { ThemePreference, UserPreferences, ViewMode } from './preferences'
 export type { Birthday, Habit, Journal, Reminder, Settings } from './personal'
