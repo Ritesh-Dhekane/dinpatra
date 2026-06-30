@@ -33,7 +33,7 @@ export function MonthView({ month, selectedIso, onSelectDay }: MonthViewProps) {
   return (
     <article className="month-view panel">
       <div className="month-view__header">
-        <p className="today-card__eyebrow">Current Month View</p>
+        <p className="month-view__eyebrow">Month</p>
         <h2 className="month-view__title">{month.label}</h2>
       </div>
 
