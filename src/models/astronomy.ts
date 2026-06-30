@@ -1,3 +1,5 @@
+import type { GregorianDate } from './temporal'
+
 export interface MoonData {
   readonly phase: string
   readonly illumination: number
@@ -11,7 +13,7 @@ export interface SunData {
 }
 
 export interface AstronomyData {
-  readonly dateISO: string
+  readonly date: GregorianDate
   readonly moon: MoonData
   readonly sun: SunData
 }
