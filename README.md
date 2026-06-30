@@ -1,32 +1,42 @@
-# React + TypeScript + Vite
+# DinPatra
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+DinPatra is an offline-first Progressive Web App for Indian calendar workflows and daily operating system tasks.
 
-Currently, two official plugins are available:
+## Current architecture
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- `src/pages` contains screen-level composition
+- `src/components` contains reusable UI primitives
+- `src/data` contains page content and static data contracts
+- `src/models` contains shared domain contracts only
+- `src/core/services` contains placeholder service boundaries
+- `src/db` contains the Dexie database entry point
+- `src/styles` contains global and application styling
+- `src/calendar`, `src/astronomy`, `src/notification`, `src/storage`, `src/localization`, `src/builder`, `src/hooks`, and `src/utils` are reserved placeholders with folder-level documentation
 
-## React Compiler
+## Foundation goals
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Offline first
+- Zero backend
+- Component driven
+- Data first
+- Calendar engine architecture
+- Strong TypeScript boundaries
 
-## Expanding the Oxlint configuration
+## Tooling
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+- React 19
+- Vite
+- TypeScript in strict mode
+- Path aliases via `@/*`
+- Dexie prepared for IndexedDB persistence
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+## Scripts
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+- `npm run dev`
+- `npm run build`
+- `npm run lint`
+- `npm run preview`
+
+## Notes
+
+This sprint intentionally stops at architecture. Calendar logic, runtime-data parsing, notification behavior, and storage schemas are still deferred to the next implementation phase.
