@@ -16,10 +16,12 @@ DinPatra is an offline-first Progressive Web App for Indian calendar workflows a
 - `src/styles` contains global and application styling
 - `src/calendar`, `src/astronomy`, `src/notification`, `src/storage`, `src/localization`, `src/builder`, and `src/utils` are reserved for domain-adjacent helpers and documented placeholders where applicable
 
-## MVP slice
+## Current UI
 
-- `TodayCard` is rendered from the Temporal Engine
-- `MonthView` is rendered from the Temporal Engine
+- The home screen opens directly into the calendar
+- `TodayCard` is driven by the Temporal Engine
+- `MonthView` is driven by the Temporal Engine
+- Clicking a day updates the active card through the engine
 - A mock runtime JSON file lives in `public/runtime-data/calendar/2026.json`
 - React components never import the JSON file directly
 
