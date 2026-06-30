@@ -258,10 +258,225 @@
   padding: 24px;
 }
 
+.panel--error {
+  border-color: rgba(220, 38, 38, 0.3);
+  color: #b91c1c;
+}
+
+.panel--placeholder {
+  color: var(--muted);
+}
+
 .panel--accent {
   background:
     radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 34%),
     linear-gradient(180deg, var(--surface), var(--surface-strong));
+}
+
+.today-card {
+  display: grid;
+  gap: 20px;
+}
+
+.today-card__top {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.today-card__eyebrow {
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.76rem;
+  color: var(--accent-strong);
+}
+
+.today-card__date {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 7vw, 5.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.07em;
+  color: var(--text-strong);
+}
+
+.today-card__meta {
+  text-align: right;
+}
+
+.today-card__weekday {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.today-card__month {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.today-card__summary {
+  display: grid;
+  gap: 8px;
+}
+
+.today-card__label {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.today-card__indian {
+  margin: 0;
+  color: var(--muted);
+}
+
+.today-card__banner {
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.16);
+}
+
+.today-card__banner-kicker {
+  display: block;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.7rem;
+  color: var(--accent-strong);
+}
+
+.today-card__banner p {
+  margin: 0;
+  color: var(--text-strong);
+}
+
+.today-card__astronomy {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.today-card__astronomy > div {
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid var(--line);
+}
+
+.today-card__field-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+.today-card__astronomy strong {
+  color: var(--text-strong);
+  font-size: 1rem;
+}
+
+.today-card__observances,
+.month-view__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.month-view {
+  display: grid;
+  gap: 18px;
+}
+
+.month-view__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.month-view__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.3rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: var(--text-strong);
+}
+
+.month-view__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.month-view__weekdays span {
+  padding: 0 8px;
+}
+
+.month-view__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.month-view__cell {
+  min-height: 110px;
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.42);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.month-view__cell--adjacent {
+  opacity: 0.45;
+}
+
+.month-view__cell--today {
+  border-color: rgba(37, 99, 235, 0.45);
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.18);
+}
+
+.month-view__cell-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.month-view__day-number {
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.month-view__today-tag {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--accent-strong);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.month-view__label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
 }
 
 .phase-list {
@@ -308,6 +523,40 @@
   line-height: 1.6;
 }
 
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.badge--festival {
+  background: rgba(217, 119, 6, 0.12);
+  color: #b45309;
+  border-color: rgba(217, 119, 6, 0.18);
+}
+
+.badge--holiday {
+  background: rgba(220, 38, 38, 0.1);
+  color: #b91c1c;
+  border-color: rgba(220, 38, 38, 0.16);
+}
+
+.badge--observance,
+.badge--event,
+.badge--birthday,
+.badge--reminder,
+.badge--habit,
+.badge--journal {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--accent-strong);
+  border-color: rgba(37, 99, 235, 0.16);
+}
+
 @media (max-width: 1024px) {
   .shell {
     padding-inline: 20px;
@@ -316,7 +565,8 @@
   .hero,
   .split-grid,
   .card-grid,
-  .hero__stats {
+  .hero__stats,
+  .today-card__astronomy {
     grid-template-columns: 1fr;
   }
 
@@ -326,6 +576,24 @@
 
   .hero h1 {
     max-width: 14ch;
+  }
+
+  .month-view__cell {
+    min-height: auto;
+  }
+
+  .month-view__weekdays {
+    gap: 6px;
+    font-size: 0.72rem;
+  }
+
+  .month-view__grid {
+    gap: 6px;
+  }
+
+  .month-view__cell {
+    padding: 10px;
+    min-height: 98px;
   }
 }
 
@@ -344,5 +612,13 @@
 
   .hero h1 {
     font-size: clamp(2.25rem, 16vw, 3.2rem);
+  }
+
+  .today-card__top {
+    flex-direction: column;
+  }
+
+  .today-card__meta {
+    text-align: left;
   }
 }

@@ -1,13 +1,11 @@
-import { FeatureCard } from '@/components/FeatureCard'
-import {
-  corePillars,
-  heroStats,
-  migrationPhases,
-  principles,
-} from '@/data/projectContent'
+import { MonthView } from '@/components/MonthView'
+import { TodayCard } from '@/components/TodayCard'
+import { useTemporalDashboard } from '@/hooks/useTemporalDashboard'
 import '@/styles/app.css'
 
 export function HomePage() {
+  const { today, month, loading, error } = useTemporalDashboard()
+
   return (
     <div className="shell">
       <div className="shell__glow shell__glow--one" aria-hidden="true" />
@@ -16,107 +14,59 @@ export function HomePage() {
       <header className="hero">
         <div className="hero__copy">
           <p className="eyebrow">DinPatra</p>
-          <h1>Offline-first calendar and personal operating system for Indian life.</h1>
+          <h1>Today&apos;s Card and the current month, powered by the Temporal Engine.</h1>
           <p className="lede">
-            The starter template has been replaced with a product scaffold that
-            keeps logic out of the UI, sets up clear feature boundaries, and
-            prepares the app for local-first calendar data.
+            This slice proves the architecture by flowing data from the runtime
+            JSON dataset through the domain engine and into the screen layer
+            without letting the UI touch the data file directly.
           </p>
         </div>
 
-        <aside className="hero__status" aria-label="Project foundation">
-          <p className="hero__status-label">Phase 1 foundation</p>
+        <aside className="hero__status" aria-label="Runtime slice status">
+          <p className="hero__status-label">MVP slice</p>
           <ul className="hero__status-list">
-            <li>React + Vite + TypeScript base</li>
-            <li>Component-driven layout structure</li>
-            <li>PWA metadata scaffold</li>
+            <li>Temporal Engine is active</li>
+            <li>Runtime JSON loads through the repository layer</li>
+            <li>React components remain data agnostic</li>
           </ul>
         </aside>
       </header>
 
       <main className="content">
-        <section className="section" aria-labelledby="foundation-title">
+        {error ? <div className="panel panel--error">{error}</div> : null}
+
+        <section className="section" aria-labelledby="today-title">
           <div className="section__header">
             <div>
-              <p className="section__kicker">Architecture principles</p>
-              <h2 id="foundation-title" className="section__title">
-                The current scaffold is shaped around the intended platform
-                rules.
+              <p className="section__kicker">Today&apos;s Card</p>
+              <h2 id="today-title" className="section__title">
+                Current local time, observances, and astronomy details.
               </h2>
             </div>
           </div>
 
-          <div className="hero__stats" aria-label="Project rules">
-            {heroStats.map((stat) => (
-              <div className="stat" key={stat.id}>
-                <span className="stat__value">{stat.value}</span>
-                <span className="stat__label">{stat.label}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="principles">
-            {principles.map((principle) => (
-              <span className="principles__item" key={principle}>
-                {principle}
-              </span>
-            ))}
-          </div>
+          {loading || !today ? (
+            <div className="panel panel--placeholder">Loading today&apos;s data...</div>
+          ) : (
+            <TodayCard day={today} />
+          )}
         </section>
 
-        <section className="section" aria-labelledby="pillars-title">
+        <section className="section" aria-labelledby="month-title">
           <div className="section__header">
             <div>
-              <p className="section__kicker">Core areas</p>
-              <h2 id="pillars-title" className="section__title">
-                The next layers should map directly to product domains.
+              <p className="section__kicker">Current Month View</p>
+              <h2 id="month-title" className="section__title">
+                The visible calendar grid is generated from the engine.
               </h2>
             </div>
           </div>
 
-          <div className="card-grid">
-            {corePillars.map((pillar) => (
-              <FeatureCard
-                key={pillar.id}
-                eyebrow={pillar.eyebrow}
-                title={pillar.title}
-                description={pillar.description}
-                bullets={pillar.bullets}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="section split-grid" aria-labelledby="roadmap-title">
-          <article className="panel">
-            <p className="section__kicker">Migration plan</p>
-            <h2 id="roadmap-title" className="section__title">
-              Phase 1 is now a real foundation instead of a starter template.
-            </h2>
-            <ol className="phase-list">
-              {migrationPhases.map((phase, index) => (
-                <li className="phase" key={phase.id}>
-                  <span className="phase__index">{index + 1}</span>
-                  <div>
-                    <h3 className="phase__title">{phase.title}</h3>
-                    <p className="phase__description">{phase.description}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </article>
-
-          <aside className="panel panel--accent" aria-label="Current gaps">
-            <p className="section__kicker">Still pending</p>
-            <h2 className="section__title">What remains outside this pass</h2>
-            <ul className="gap-list">
-              <li>Routing and screen-level navigation</li>
-              <li>IndexedDB and Dexie data access layer</li>
-              <li>CSV-to-runtime-JSON build pipeline</li>
-              <li>Service worker caching and offline sync strategy</li>
-              <li>Calendar engine domain model and recurrence logic</li>
-            </ul>
-          </aside>
+          {loading || !month ? (
+            <div className="panel panel--placeholder">Loading month data...</div>
+          ) : (
+            <MonthView month={month} />
+          )}
         </section>
       </main>
     </div>
