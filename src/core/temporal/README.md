@@ -2,34 +2,26 @@
 
 The Temporal Engine is DinPatra's central time-domain abstraction.
 
-It sits between application screens and infrastructure so future features can ask
-for days, weeks, months, years, observances, astronomy, or navigation without
-knowing where the underlying data comes from.
+It sits between the application layer and the runtime repository so screens can
+ask for days, weeks, months, years, observances, and astronomy details without
+knowing where the data comes from.
 
 ## What it solves
 
 - Creates one canonical temporal API for the app
 - Keeps calendar logic framework-independent
-- Prevents UI code from talking directly to storage or generated data
-- Makes future CSV, JSON, and IndexedDB integrations adapters instead of core dependencies
+- Prevents UI code from talking directly to runtime JSON or persistence
+- Makes future CSV, IndexedDB, and sync integrations adapter-only concerns
 
-## Dependencies
+## Responsibilities
 
-The engine depends only on provider interfaces:
-
-- `DateResolver`
-- `CalendarProvider`
-- `AstronomyProvider`
-- `MoonProvider`
-- `ObservanceProvider`
-- `LocalizationProvider`
-- `CalendarNavigator`
-- `CalendarFormatter`
-
-Those interfaces are intentionally minimal so infrastructure can evolve without
-forcing a rewrite of the domain layer.
+- `DateResolver` normalizes incoming date inputs
+- `CalendarProvider` resolves resolved calendar views from runtime data
+- `CalendarNavigator` moves through dates without coupling to React
+- `LocalizationProvider` formats labels and clock values for display
 
 ## Current status
 
-The engine is a placeholder foundation. It returns deterministic placeholder
-structures while the real calendar data pipeline is still being designed.
+The engine is now connected to a mock runtime dataset through the application
+layer. It still uses representative sample data only, so real CSV-backed content
+can be introduced later without changing the engine contract.

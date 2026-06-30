@@ -1,3 +1,5 @@
+import type { AstronomyData } from './astronomy'
+
 export type GregorianDate = Readonly<{
   year: number
   month: number
@@ -36,23 +38,32 @@ export type CalendarDay = Readonly<{
   gregorian: GregorianDate
   indian: IndianDate | null
   isToday: boolean
+  isCurrentMonth: boolean
   label: string
+  weekdayLabel: string
+  monthYearLabel: string
+  highlightBanner: string | null
   observances: readonly Observance[]
+  astronomy: AstronomyData | null
 }>
 
 export type CalendarMonth = Readonly<{
   year: number
   month: number
+  label: string
+  weekdayLabels: readonly string[]
   days: readonly CalendarDay[]
 }>
 
 export type CalendarWeek = Readonly<{
   year: number
   week: number
+  label: string
   days: readonly CalendarDay[]
 }>
 
 export type CalendarYear = Readonly<{
   year: number
+  label: string
   months: readonly CalendarMonth[]
 }>

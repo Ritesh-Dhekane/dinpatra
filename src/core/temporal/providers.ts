@@ -54,7 +54,10 @@ export interface ObservanceProvider {
  */
 export interface LocalizationProvider {
   formatDate(date: GregorianDate): string
+  formatTime(iso: string): string
+  formatMonthYear(date: GregorianDate): string
   formatMonth(year: number, month: number): string
+  formatWeekday(date: GregorianDate): string
   formatWeek(year: number, week: number): string
 }
 

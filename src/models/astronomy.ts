@@ -4,6 +4,8 @@ export interface MoonData {
   readonly phase: string
   readonly illumination: number
   readonly ageDays: number
+  readonly moonriseISO: string
+  readonly moonsetISO: string
 }
 
 export interface SunData {

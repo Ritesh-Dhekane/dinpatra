@@ -5,7 +5,6 @@ import type {
   CalendarYear,
   GregorianDate,
   IndianDate,
-  Observance,
 } from '@/models'
 import type {
   AstronomyProvider,
@@ -37,75 +36,59 @@ export interface TemporalEngine {
   getYear(year: number): Promise<CalendarYear>
   nextDay(date?: GregorianDate | IndianDate | string): Promise<CalendarDay>
   previousDay(date?: GregorianDate | IndianDate | string): Promise<CalendarDay>
-  nextMonth(
-    year?: number,
-    month?: number,
-  ): Promise<CalendarMonth>
-  previousMonth(
-    year?: number,
-    month?: number,
-  ): Promise<CalendarMonth>
+  nextMonth(year?: number, month?: number): Promise<CalendarMonth>
+  previousMonth(year?: number, month?: number): Promise<CalendarMonth>
 }
 
-const placeholderGregorianDate: GregorianDate = {
-  year: 1970,
-  month: 1,
-  day: 1,
-  iso: '1970-01-01',
-}
-
-const placeholderIndianDate: IndianDate = {
-  year: 1891,
-  month: 10,
-  day: 11,
-  system: 'saka',
-  iso: '1970-01-01',
-}
-
-const placeholderObservances: readonly Observance[] = []
-
-function createPlaceholderDay(date: GregorianDate): CalendarDay {
-  return {
-    gregorian: date,
-    indian: placeholderIndianDate,
-    isToday: false,
-    label: 'Placeholder day',
-    observances: placeholderObservances,
-  }
-}
-
-function createPlaceholderMonth(year: number, month: number): CalendarMonth {
+function currentDate(): GregorianDate {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth() + 1
+  const day = now.getDate()
   return {
     year,
     month,
-    days: [createPlaceholderDay(placeholderGregorianDate)],
+    day,
+    iso: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
   }
 }
 
-function createPlaceholderWeek(date: GregorianDate): CalendarWeek {
+function addDays(date: GregorianDate, amount: number): GregorianDate {
+  const next = new Date(Date.UTC(date.year, date.month - 1, date.day))
+  next.setUTCDate(next.getUTCDate() + amount)
   return {
-    year: date.year,
-    week: 1,
-    days: [createPlaceholderDay(date)],
+    year: next.getUTCFullYear(),
+    month: next.getUTCMonth() + 1,
+    day: next.getUTCDate(),
+    iso: next.toISOString().slice(0, 10),
   }
 }
 
-function createPlaceholderYear(year: number): CalendarYear {
+function addMonths(date: GregorianDate, amount: number): { year: number; month: number } {
+  const next = new Date(Date.UTC(date.year, date.month - 1, 1))
+  next.setUTCMonth(next.getUTCMonth() + amount)
   return {
-    year,
-    months: [createPlaceholderMonth(year, 1)],
+    year: next.getUTCFullYear(),
+    month: next.getUTCMonth() + 1,
   }
 }
 
 function resolveGregorianDate(
   dateResolver: DateResolver,
   date: GregorianDate | IndianDate | string | undefined,
-): GregorianDate {
+): Promise<GregorianDate> {
   if (date == null) {
-    return placeholderGregorianDate
+    return Promise.resolve(currentDate())
   }
 
-  return dateResolver.resolveGregorianDate(date)
+  return Promise.resolve(dateResolver.resolveGregorianDate(date))
+}
+
+function resolveNavigationBase(
+  dateResolver: DateResolver,
+  date: GregorianDate | IndianDate | string | undefined,
+): Promise<GregorianDate> {
+  return resolveGregorianDate(dateResolver, date)
 }
 
 export function createTemporalEngine(
@@ -115,72 +98,55 @@ export function createTemporalEngine(
 
   return {
     async getToday() {
-      return calendarProvider.getDay(placeholderGregorianDate)
+      return calendarProvider.getDay(currentDate())
     },
     async getDate(date) {
-      const resolvedDate = resolveGregorianDate(dateResolver, date)
+      const resolvedDate = await resolveGregorianDate(dateResolver, date)
       return calendarProvider.getDay(resolvedDate)
     },
     async getMonth(year, month) {
       return calendarProvider.getMonth(year, month)
     },
     async getWeek(date) {
-      const resolvedDate = resolveGregorianDate(dateResolver, date)
+      const resolvedDate = await resolveGregorianDate(dateResolver, date)
       return calendarProvider.getWeek(resolvedDate)
     },
     async getYear(year) {
       return calendarProvider.getYear(year)
     },
     async nextDay(date) {
-      const resolvedDate = resolveGregorianDate(dateResolver, date)
-      if (dependencies.navigator) {
-        return calendarProvider.getDay(dependencies.navigator.nextDay(resolvedDate))
-      }
-
-      return calendarProvider.getDay(resolvedDate)
+      const resolvedDate = await resolveNavigationBase(dateResolver, date)
+      const nextDate = dependencies.navigator
+        ? dependencies.navigator.nextDay(resolvedDate)
+        : addDays(resolvedDate, 1)
+      return calendarProvider.getDay(nextDate)
     },
     async previousDay(date) {
-      const resolvedDate = resolveGregorianDate(dateResolver, date)
-      if (dependencies.navigator) {
-        return calendarProvider.getDay(
-          dependencies.navigator.previousDay(resolvedDate),
-        )
-      }
-
-      return calendarProvider.getDay(resolvedDate)
+      const resolvedDate = await resolveNavigationBase(dateResolver, date)
+      const previousDate = dependencies.navigator
+        ? dependencies.navigator.previousDay(resolvedDate)
+        : addDays(resolvedDate, -1)
+      return calendarProvider.getDay(previousDate)
     },
     async nextMonth(year, month) {
-      const monthContext = year && month ? { year, month } : { year: 1970, month: 1 }
-      if (dependencies.navigator) {
-        const next = dependencies.navigator.nextMonth(
-          monthContext.year,
-          monthContext.month,
-        )
-        return calendarProvider.getMonth(next.year, next.month)
-      }
-
-      return calendarProvider.getMonth(monthContext.year, monthContext.month)
+      const baseDate =
+        year != null && month != null
+          ? ({ year, month, day: 1, iso: `${year}-${String(month).padStart(2, '0')}-01` } as GregorianDate)
+          : currentDate()
+      const next = dependencies.navigator
+        ? dependencies.navigator.nextMonth(baseDate.year, baseDate.month)
+        : addMonths(baseDate, 1)
+      return calendarProvider.getMonth(next.year, next.month)
     },
     async previousMonth(year, month) {
-      const monthContext = year && month ? { year, month } : { year: 1970, month: 1 }
-      if (dependencies.navigator) {
-        const previous = dependencies.navigator.previousMonth(
-          monthContext.year,
-          monthContext.month,
-        )
-        return calendarProvider.getMonth(previous.year, previous.month)
-      }
-
-      return calendarProvider.getMonth(monthContext.year, monthContext.month)
+      const baseDate =
+        year != null && month != null
+          ? ({ year, month, day: 1, iso: `${year}-${String(month).padStart(2, '0')}-01` } as GregorianDate)
+          : currentDate()
+      const previous = dependencies.navigator
+        ? dependencies.navigator.previousMonth(baseDate.year, baseDate.month)
+        : addMonths(baseDate, -1)
+      return calendarProvider.getMonth(previous.year, previous.month)
     },
   }
-}
-
-export const temporalPlaceholders = {
-  placeholderGregorianDate,
-  placeholderIndianDate,
-  createPlaceholderDay,
-  createPlaceholderMonth,
-  createPlaceholderWeek,
-  createPlaceholderYear,
 }

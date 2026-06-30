@@ -1,0 +1,194 @@
+{
+  "year": 2026,
+  "timezone": "Asia/Kolkata",
+  "days": {
+    "2026-01-26": {
+      "gregorian": {
+        "year": 2026,
+        "month": 1,
+        "day": 26,
+        "iso": "2026-01-26"
+      },
+      "indian": {
+        "year": 1947,
+        "month": 11,
+        "day": 6,
+        "system": "vikram-samvat",
+        "iso": "2026-01-26"
+      },
+      "label": "National holiday",
+      "highlightBanner": "Republic Day reminder for the yearly civic calendar.",
+      "observances": [
+        {
+          "id": "republic-day",
+          "title": "Republic Day",
+          "type": "holiday",
+          "date": {
+            "year": 2026,
+            "month": 1,
+            "day": 26,
+            "iso": "2026-01-26"
+          }
+        }
+      ],
+      "astronomy": {
+        "date": {
+          "year": 2026,
+          "month": 1,
+          "day": 26,
+          "iso": "2026-01-26"
+        },
+        "sun": {
+          "sunriseISO": "2026-01-26T07:13:00+05:30",
+          "sunsetISO": "2026-01-26T18:04:00+05:30",
+          "daylightMinutes": 651
+        },
+        "moon": {
+          "phase": "Waxing Crescent",
+          "illumination": 21,
+          "ageDays": 4,
+          "moonriseISO": "2026-01-26T09:48:00+05:30",
+          "moonsetISO": "2026-01-26T21:11:00+05:30"
+        }
+      }
+    },
+    "2026-06-05": {
+      "gregorian": {
+        "year": 2026,
+        "month": 6,
+        "day": 5,
+        "iso": "2026-06-05"
+      },
+      "indian": {
+        "year": 1948,
+        "month": 3,
+        "day": 18,
+        "system": "vikram-samvat",
+        "iso": "2026-06-05"
+      },
+      "label": "Festival day",
+      "highlightBanner": "Festival planning and family coordination day.",
+      "observances": [
+        {
+          "id": "sample-festival",
+          "title": "Sample Summer Festival",
+          "type": "festival",
+          "date": {
+            "year": 2026,
+            "month": 6,
+            "day": 5,
+            "iso": "2026-06-05"
+          }
+        }
+      ],
+      "astronomy": {
+        "date": {
+          "year": 2026,
+          "month": 6,
+          "day": 5,
+          "iso": "2026-06-05"
+        },
+        "sun": {
+          "sunriseISO": "2026-06-05T05:21:00+05:30",
+          "sunsetISO": "2026-06-05T19:08:00+05:30",
+          "daylightMinutes": 827
+        },
+        "moon": {
+          "phase": "Waxing Gibbous",
+          "illumination": 72,
+          "ageDays": 10,
+          "moonriseISO": "2026-06-05T15:32:00+05:30",
+          "moonsetISO": "2026-06-05T02:14:00+05:30"
+        }
+      }
+    },
+    "2026-06-21": {
+      "gregorian": {
+        "year": 2026,
+        "month": 6,
+        "day": 21,
+        "iso": "2026-06-21"
+      },
+      "indian": {
+        "year": 1948,
+        "month": 4,
+        "day": 3,
+        "system": "vikram-samvat",
+        "iso": "2026-06-21"
+      },
+      "label": "Observance day",
+      "highlightBanner": "A focused observance day with a lighter schedule.",
+      "observances": [
+        {
+          "id": "international-yoga-day",
+          "title": "International Yoga Day",
+          "type": "observance",
+          "date": {
+            "year": 2026,
+            "month": 6,
+            "day": 21,
+            "iso": "2026-06-21"
+          }
+        }
+      ],
+      "astronomy": {
+        "date": {
+          "year": 2026,
+          "month": 6,
+          "day": 21,
+          "iso": "2026-06-21"
+        },
+        "sun": {
+          "sunriseISO": "2026-06-21T05:23:00+05:30",
+          "sunsetISO": "2026-06-21T19:11:00+05:30",
+          "daylightMinutes": 828
+        },
+        "moon": {
+          "phase": "Last Quarter",
+          "illumination": 41,
+          "ageDays": 19,
+          "moonriseISO": "2026-06-21T00:54:00+05:30",
+          "moonsetISO": "2026-06-21T13:48:00+05:30"
+        }
+      }
+    },
+    "2026-06-30": {
+      "gregorian": {
+        "year": 2026,
+        "month": 6,
+        "day": 30,
+        "iso": "2026-06-30"
+      },
+      "indian": {
+        "year": 1948,
+        "month": 4,
+        "day": 12,
+        "system": "vikram-samvat",
+        "iso": "2026-06-30"
+      },
+      "label": "Ordinary day",
+      "highlightBanner": "A quiet planning day with time to reset the month.",
+      "observances": [],
+      "astronomy": {
+        "date": {
+          "year": 2026,
+          "month": 6,
+          "day": 30,
+          "iso": "2026-06-30"
+        },
+        "sun": {
+          "sunriseISO": "2026-06-30T05:26:00+05:30",
+          "sunsetISO": "2026-06-30T19:14:00+05:30",
+          "daylightMinutes": 828
+        },
+        "moon": {
+          "phase": "Waning Crescent",
+          "illumination": 12,
+          "ageDays": 26,
+          "moonriseISO": "2026-06-30T04:58:00+05:30",
+          "moonsetISO": "2026-06-30T17:36:00+05:30"
+        }
+      }
+    }
+  }
+}
