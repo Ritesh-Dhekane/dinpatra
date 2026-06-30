@@ -1,7 +1,5 @@
 export type { BuilderService } from './builderService'
 export { createBuilderService } from './builderService'
-export type { CalendarEngineService } from './calendarEngineService'
-export { createCalendarEngineService } from './calendarEngineService'
 export type { LocalizationService } from './localizationService'
 export { createLocalizationService } from './localizationService'
 export type { NotificationService } from './notificationService'
