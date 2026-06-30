@@ -2,6 +2,8 @@ import type { CalendarMonth } from '@/models'
 
 type MonthViewProps = {
   month: CalendarMonth
+  selectedIso: string | null
+  onSelectDay: (iso: string) => void | Promise<void>
 }
 
 function badgeLabel(type: string) {
@@ -27,14 +29,12 @@ function badgeLabel(type: string) {
   }
 }
 
-export function MonthView({ month }: MonthViewProps) {
+export function MonthView({ month, selectedIso, onSelectDay }: MonthViewProps) {
   return (
     <article className="month-view panel">
       <div className="month-view__header">
-        <div>
-          <p className="today-card__eyebrow">Current Month</p>
-          <h3 className="month-view__title">{month.label}</h3>
-        </div>
+        <p className="today-card__eyebrow">Current Month View</p>
+        <h2 className="month-view__title">{month.label}</h2>
       </div>
 
       <div className="month-view__weekdays" aria-hidden="true">
@@ -43,43 +43,57 @@ export function MonthView({ month }: MonthViewProps) {
         ))}
       </div>
 
-      <div className="month-view__grid">
-        {month.days.map((day) => (
-          <div
-            className={[
-              'month-view__cell',
-              day.isCurrentMonth ? 'month-view__cell--current' : 'month-view__cell--adjacent',
-              day.isToday ? 'month-view__cell--today' : '',
-            ]
-              .filter(Boolean)
-              .join(' ')}
-            key={day.gregorian.iso}
-            aria-label={`${day.weekdayLabel}, ${day.monthYearLabel}`}
-          >
-            <div className="month-view__cell-top">
-              <span className="month-view__day-number">{day.gregorian.day}</span>
-              {day.isToday ? <span className="month-view__today-tag">Today</span> : null}
-            </div>
+      <div className="month-view__grid" role="grid" aria-label={month.label}>
+        {month.days.map((day) => {
+          const isSelected = day.gregorian.iso === selectedIso
+          const firstObservance = day.observances[0]
+          const cellClasses = [
+            'month-view__cell',
+            day.isCurrentMonth ? 'month-view__cell--current' : 'month-view__cell--adjacent',
+            day.isToday ? 'month-view__cell--today' : '',
+            isSelected ? 'month-view__cell--selected' : '',
+          ]
+            .filter(Boolean)
+            .join(' ')
 
-            {day.label !== 'Ordinary day' ? (
-              <p className="month-view__label">{day.label}</p>
-            ) : null}
-
-            {day.observances.length > 0 ? (
-              <div className="month-view__badges">
-                {day.observances.slice(0, 2).map((observance) => (
-                  <span
-                    className={`badge badge--${observance.type}`}
-                    key={observance.id}
-                    title={observance.title}
-                  >
-                    {badgeLabel(observance.type)}
-                  </span>
-                ))}
+          return (
+            <button
+              className={cellClasses}
+              key={day.gregorian.iso}
+              type="button"
+              aria-pressed={isSelected}
+              aria-label={`${day.weekdayLabel}, ${day.monthYearLabel}`}
+              onClick={() => {
+                void onSelectDay(day.gregorian.iso)
+              }}
+            >
+              <div className="month-view__cell-top">
+                <span className="month-view__day-number">{day.gregorian.day}</span>
+                <div className="month-view__cell-chips">
+                  {day.isToday ? <span className="month-view__today-tag">Today</span> : null}
+                  {isSelected ? <span className="month-view__selected-tag">Selected</span> : null}
+                </div>
               </div>
-            ) : null}
-          </div>
-        ))}
+
+              {day.label !== 'Ordinary day' ? (
+                <p className="month-view__label">{day.label}</p>
+              ) : (
+                <span className="month-view__spacer" aria-hidden="true" />
+              )}
+
+              {firstObservance ? (
+                <div className="month-view__badges">
+                  <span
+                    className={`badge badge--${firstObservance.type}`}
+                    title={firstObservance.title}
+                  >
+                    {badgeLabel(firstObservance.type)}
+                  </span>
+                </div>
+              ) : null}
+            </button>
+          )
+        })}
       </div>
     </article>
   )

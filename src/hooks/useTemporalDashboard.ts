@@ -1,23 +1,22 @@
-import { useEffect, useState } from 'react'
-import type { CalendarDay, CalendarMonth } from '@/models'
+import { useEffect, useRef, useState } from 'react'
+import type { CalendarDay, CalendarMonth, GregorianDate } from '@/models'
 import { temporalEngine } from '@/app/temporal'
 
 type TemporalDashboardState = {
-  today: CalendarDay | null
+  day: CalendarDay | null
   month: CalendarMonth | null
   loading: boolean
   error: string | null
-}
-
-const initialState: TemporalDashboardState = {
-  today: null,
-  month: null,
-  loading: true,
-  error: null,
+  selectDay: (date: GregorianDate | string) => Promise<void>
 }
 
 export function useTemporalDashboard(): TemporalDashboardState {
-  const [state, setState] = useState<TemporalDashboardState>(initialState)
+  const [day, setDay] = useState<CalendarDay | null>(null)
+  const [month, setMonth] = useState<CalendarMonth | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const requestIdRef = useRef(0)
+  const isMountedRef = useRef(true)
 
   useEffect(() => {
     let active = true
@@ -25,7 +24,7 @@ export function useTemporalDashboard(): TemporalDashboardState {
     async function load() {
       try {
         const today = await temporalEngine.getToday()
-        const month = await temporalEngine.getMonth(
+        const currentMonth = await temporalEngine.getMonth(
           today.gregorian.year,
           today.gregorian.month,
         )
@@ -34,23 +33,21 @@ export function useTemporalDashboard(): TemporalDashboardState {
           return
         }
 
-        setState({
-          today,
-          month,
-          loading: false,
-          error: null,
-        })
-      } catch (error) {
+        setDay(today)
+        setMonth(currentMonth)
+        setError(null)
+      } catch (loadError) {
         if (!active) {
           return
         }
 
-        setState({
-          today: null,
-          month: null,
-          loading: false,
-          error: error instanceof Error ? error.message : 'Unable to load calendar data.',
-        })
+        setDay(null)
+        setMonth(null)
+        setError(loadError instanceof Error ? loadError.message : 'Unable to load calendar data.')
+      } finally {
+        if (active) {
+          setLoading(false)
+        }
       }
     }
 
@@ -61,5 +58,37 @@ export function useTemporalDashboard(): TemporalDashboardState {
     }
   }, [])
 
-  return state
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false
+    }
+  }, [])
+
+  async function selectDay(date: GregorianDate | string) {
+    const requestId = requestIdRef.current + 1
+    requestIdRef.current = requestId
+
+    try {
+      const selectedDay = await temporalEngine.getDate(date)
+
+      if (!isMountedRef.current || requestId !== requestIdRef.current) {
+        return
+      }
+
+      setDay(selectedDay)
+      setError(null)
+    } catch (selectionError) {
+      if (!isMountedRef.current || requestId !== requestIdRef.current) {
+        return
+      }
+
+      setError(
+        selectionError instanceof Error
+          ? selectionError.message
+          : 'Unable to load the selected date.',
+      )
+    }
+  }
+
+  return { day, month, loading, error, selectDay }
 }
