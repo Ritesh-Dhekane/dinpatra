@@ -8,7 +8,8 @@ DinPatra is an offline-first Progressive Web App for Indian calendar workflows a
 - `src/components` contains reusable UI primitives
 - `src/data` contains page content and static data contracts
 - `src/models` contains shared domain contracts only
-- `src/core/services` contains placeholder service boundaries
+- `src/core/temporal` contains the Temporal Engine and provider interfaces
+- `src/core/services` contains non-temporal placeholder service boundaries
 - `src/db` contains the Dexie database entry point
 - `src/styles` contains global and application styling
 - `src/calendar`, `src/astronomy`, `src/notification`, `src/storage`, `src/localization`, `src/builder`, `src/hooks`, and `src/utils` are reserved placeholders with folder-level documentation
