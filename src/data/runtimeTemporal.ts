@@ -14,7 +14,7 @@ import type {
 
 const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const
 
-const runtimeYearCache = new Map<number, Promise<RuntimeCalendarYearDocument | null>>()
+const runtimeYearCache = new Map<number, Promise<RuntimeCalendarYearDocument>>()
 
 function pad(value: number) {
   return String(value).padStart(2, '0')
@@ -93,37 +93,48 @@ function monthYearLabel(date: GregorianDate, localizationProvider: LocalizationP
 
 async function loadRuntimeYear(
   year: number,
-): Promise<RuntimeCalendarYearDocument | null> {
+): Promise<RuntimeCalendarYearDocument> {
   if (!runtimeYearCache.has(year)) {
-    runtimeYearCache.set(
-      year,
-      fetch(`/runtime-data/calendar/${year}.json`).then(async (response) => {
+    const load = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.BASE_URL}runtime-data/calendar/${year}.json`,
+        )
+
         if (!response.ok) {
-          return null
+          throw new Error(`Calendar data for ${year} is not available yet.`)
         }
 
         return (await response.json()) as RuntimeCalendarYearDocument
-      }),
-    )
+      } catch (error) {
+        runtimeYearCache.delete(year)
+
+        if (error instanceof Error && error.message.includes('not available yet')) {
+          throw error
+        }
+
+        throw new Error(
+          'Calendar data could not be loaded right now. Please check your connection and try again.',
+        )
+      }
+    }
+
+    runtimeYearCache.set(year, load())
   }
 
-  return runtimeYearCache.get(year) ?? null
+  return runtimeYearCache.get(year) as Promise<RuntimeCalendarYearDocument>
 }
 
 function pickDayRecord(
-  yearDocument: RuntimeCalendarYearDocument | null,
+  yearDocument: RuntimeCalendarYearDocument,
   date: GregorianDate,
 ): RuntimeCalendarDayRecord | null {
-  if (!yearDocument) {
-    return null
-  }
-
   return yearDocument.days[toIsoDate(date)] ?? null
 }
 
 function resolveRecord(
   date: GregorianDate,
-  yearDocument: RuntimeCalendarYearDocument | null,
+  yearDocument: RuntimeCalendarYearDocument,
   localizationProvider: LocalizationProvider,
   isToday: boolean,
   isCurrentMonth: boolean,
@@ -186,7 +197,7 @@ async function buildMonth(
 }
 
 export interface RuntimeTemporalRepository {
-  getYear(year: number): Promise<RuntimeCalendarYearDocument | null>
+  getYear(year: number): Promise<RuntimeCalendarYearDocument>
 }
 
 export function createRuntimeTemporalRepository(): RuntimeTemporalRepository {
